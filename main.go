@@ -94,7 +94,7 @@ func build(tags string) error {
 
 	// build main.wasm
 	cmd := exec.Command("go", "build", "-o", filepath.Join("wasmnow", "main.wasm"), "-tags", tags)
-	cmd.Env = append(os.Environ(), "GOOS=js", "GOARCH=wasm")
+	cmd.Env = append(os.Environ(), "GOOS=js", "GOARCH=wasm", "GOTOOLCHAIN=go1.24rc1+auto")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {
