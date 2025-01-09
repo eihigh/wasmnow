@@ -25,8 +25,9 @@ func main() {
 	log.SetPrefix("")
 	log.SetFlags(0)
 	buildOnly := flag.Bool("b", false, "build without starting the server")
+	dir := flag.String("d", "wasmnow", "destination directory")
 	addr := flag.String("http", defaultAddr, "HTTP service address")
-	tags := flag.String("tags", "", "Build tags")
+	tags := flag.String("tags", "", "build tags")
 	flag.Parse()
 
 	if flag.NArg() > 0 {
@@ -34,42 +35,43 @@ func main() {
 		flag.Usage()
 	}
 
-	if err := build(*tags); err != nil {
+	if err := build(*dir, *tags); err != nil {
 		log.Fatalf("build failed: %v", err)
 	}
 	if *buildOnly {
 		return
 	}
-	if err := serve(*addr); err != nil {
+	if err := serve(*dir, *addr); err != nil {
 		log.Fatalf("serve failed: %v", err)
 	}
 }
 
-func build(tags string) error {
-	// create 'wasmnow' dir if it doesn't exist
-	if _, err := os.Stat("wasmnow"); os.IsNotExist(err) {
-		if err := os.Mkdir("wasmnow", 0777); err != nil {
+func build(dir, tags string) error {
+	// create dir if it doesn't exist
+	if _, err := os.Stat(dir); os.IsNotExist(err) {
+		if err := os.MkdirAll(dir, 0777); err != nil {
 			return err
 		}
 		log.Print(welcomeToWasmnow.get())
-		log.Print(createdANewFolderCalledWasmnow.get())
+		log.Printf(createdANewFolder.get(), dir)
+		log.Print(noteUseTheDOptionToChangeTheDestinationDirectory.get())
 		log.Print(forAnyExternalFilesYourProgramNeeds.get())
 		log.Print(useGosEmbedPackageToIncludeThemRecommended.get())
-		log.Print(simplyCopyThemIntoTheWasmnowDirectory.get())
+		log.Printf(simplyCopyThemIntoTheDirectory.get(), dir)
 		if runtime.GOOS == "windows" {
-			log.Print(inWindowsToCreateAZipFile.get())
+			log.Printf(inWindowsToCreateAZipFile.get(), dir)
 		} else if runtime.GOOS == "darwin" {
-			log.Print(inMacOSToCreateAZipFile.get())
+			log.Printf(inMacOSToCreateAZipFile.get(), dir, filepath.Base(dir))
 		}
 	}
 
 	// create basic index.html if it doesn't exist
-	path := filepath.Join("wasmnow", "index.html")
+	path := filepath.Join(dir, "index.html")
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		if err := os.WriteFile(path, basicIndexHTML, 0666); err != nil {
 			return err
 		}
-		log.Print(createdABasicWebpageWasmnowIndexHtml.get())
+		log.Printf(createdABasicWebpageIndexHtml.get(), dir)
 	}
 
 	// copy wasm_exec.js
@@ -82,7 +84,7 @@ func build(tags string) error {
 		return fmt.Errorf("failed to open wasm_exec.js: %w", err)
 	}
 	defer src.Close()
-	dst, err := os.Create(filepath.Join("wasmnow", "wasm_exec.js"))
+	dst, err := os.Create(filepath.Join(dir, "wasm_exec.js"))
 	if err != nil {
 		return fmt.Errorf("failed to create wasm_exec.js: %w", err)
 	}
@@ -90,27 +92,27 @@ func build(tags string) error {
 	if _, err := io.Copy(dst, src); err != nil {
 		return fmt.Errorf("failed to copy wasm_exec.js: %w", err)
 	}
-	log.Printf(automaticallyCopiedARequiredFileWasmnowWasmExecJs.get(), wasmExecJSPath)
+	log.Printf(automaticallyCopiedARequiredFileWasmExecJs.get(), dir, wasmExecJSPath)
 
 	// build main.wasm
-	cmd := exec.Command("go", "build", "-o", filepath.Join("wasmnow", "main.wasm"), "-tags", tags)
+	cmd := exec.Command("go", "build", "-o", filepath.Join(dir, "main.wasm"), "-tags", tags)
 	cmd.Env = append(os.Environ(), "GOOS=js", "GOARCH=wasm", "GOTOOLCHAIN=go1.24rc1+auto")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {
 		return fmt.Errorf("go build: %w", err)
 	}
-	log.Print(builtWasmnowMainWasm.get())
+	log.Printf(builtMainWasm.get(), dir)
 
 	return nil
 }
 
-func serve(addr string) error {
-	// serve wasmnow directory
+func serve(dir, addr string) error {
+	// serve directory
 	log.Print(yourProgramIsReadyToTryOut.get())
 	log.Printf(pleaseOpenHttpLocalhostInYourWebBrowser.get(), "http://"+addr)
 	log.Print(noteUseTheBOptionToBuildWithoutSettingUpTheSpecialPage.get())
-	if err := http.ListenAndServe(addr, http.FileServer(http.Dir("wasmnow"))); err != nil {
+	if err := http.ListenAndServe(addr, http.FileServer(http.Dir(dir))); err != nil {
 		return fmt.Errorf("http.ListenAndServe: %w", err)
 	}
 	return nil

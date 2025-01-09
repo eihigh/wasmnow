@@ -35,9 +35,13 @@ var (
 		"":   "🔧 wasmnow is a simple tool that helps you create Go programs that run in your web browser.",
 		"JP": "🔧 wasmnowは、ブラウザで動くGoプログラムを簡単に作るためのツールです。",
 	}
-	createdANewFolderCalledWasmnow = msgs{
-		"":   "📁 Created a new folder called 'wasmnow'. This is where all your program files will live.",
-		"JP": "📁 'wasmnow'という新しいフォルダを作成しました。必要なファイルはこのフォルダの中に入れてください。",
+	createdANewFolder = msgs{
+		"":   "📁 Created a new folder called %s. This is where all your program files will live.",
+		"JP": "📁 %sという新しいフォルダを作成しました。必要なファイルはこのフォルダの中に入れてください。",
+	}
+	noteUseTheDOptionToChangeTheDestinationDirectory = msgs{
+		"":   "📝 Note: Use the -d option to change the destination directory.",
+		"JP": "📝 ※出力先のフォルダを変更する場合は、-d オプションを使ってください。",
 	}
 	forAnyExternalFilesYourProgramNeeds = msgs{
 		"":   "📝 For any external files your program needs, you have two options:",
@@ -47,29 +51,29 @@ var (
 		"":   "  - Use Go's embed package to include them (recommended)",
 		"JP": "  - embedパッケージを使って埋め込む（推奨）",
 	}
-	simplyCopyThemIntoTheWasmnowDirectory = msgs{
-		"":   "  - Simply copy them into the wasmnow directory",
-		"JP": "  - 単純にwasmnowフォルダの中にコピーする",
+	simplyCopyThemIntoTheDirectory = msgs{
+		"":   "  - Simply copy them into the %s directory",
+		"JP": "  - 単純に%sフォルダの中にコピーする",
 	}
-	createdABasicWebpageWasmnowIndexHtml = msgs{
-		"":   "📄 Created a basic webpage (wasmnow/index.html) that you can customize as you like.",
-		"JP": "📄 基本的な内容のwasmnow/index.htmlを作成しました。このファイルは自由に編集できます。",
+	createdABasicWebpageIndexHtml = msgs{
+		"":   "📄 Created a basic webpage (%s/index.html) that you can customize as you like.",
+		"JP": "📄 基本的な内容の%s/index.htmlを作成しました。このファイルは自由に編集できます。",
 	}
-	automaticallyCopiedARequiredFileWasmnowWasmExecJs = msgs{
-		"":   "📄 Automatically copied a required file (wasmnow/wasm_exec.js) from %s",
-		"JP": "📄 プログラムの実行に必要なwasmnow/wasm_exec.jsを %s から自動的にコピーしました。",
+	automaticallyCopiedARequiredFileWasmExecJs = msgs{
+		"":   "📄 Automatically copied a required file (%s/wasm_exec.js) from %s",
+		"JP": "📄 プログラムの実行に必要な%s/wasm_exec.jsを %s から自動的にコピーしました。",
 	}
-	builtWasmnowMainWasm = msgs{
-		"":   "🔧 Built wasmnow/main.wasm",
-		"JP": "🔧 wasmnow/main.wasmをビルドしました。",
+	builtMainWasm = msgs{
+		"":   "🔧 Built %s/main.wasm",
+		"JP": "🔧 %s/main.wasmをビルドしました。",
 	}
 	inWindowsToCreateAZipFile = msgs{
-		"":   "📝 In Windows, to create a zip file, Right-click the wasmnow folder, go to 'Send to', and choose 'Compressed (zipped) folder'",
-		"JP": "📝 Windowsの場合、zipファイルを作るには、wasmnowフォルダを右クリックして「送る」から「圧縮 (zip形式) フォルダー」を選んでください。",
+		"":   "📝 In Windows, to create a zip file, Right-click the %s folder, go to 'Send to', and choose 'Compressed (zipped) folder'",
+		"JP": "📝 Windowsの場合、zipファイルを作るには、%sフォルダを右クリックして「送る」から「圧縮 (zip形式) フォルダー」を選んでください。",
 	}
 	inMacOSToCreateAZipFile = msgs{
-		"":   "📝 In macOS, to create a zip file, Right-click the wasmnow folder and choose 'Compress 'wasmnow''",
-		"JP": "📝 macOSの場合、zipファイルを作るには、wasmnowフォルダを右クリックして「\"wasmnow\" を圧縮」を選んでください。",
+		"":   "📝 In macOS, to create a zip file, Right-click the %s folder and choose 'Compress '%s''",
+		"JP": "📝 macOSの場合、zipファイルを作るには、%sフォルダを右クリックして「\"%s\" を圧縮」を選んでください。",
 	}
 	yourProgramIsReadyToTryOut = msgs{
 		"":   "👀 Your program is ready to try out!",
